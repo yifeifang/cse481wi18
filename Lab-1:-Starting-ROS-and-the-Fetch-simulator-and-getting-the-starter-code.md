@@ -28,7 +28,6 @@ Go to your [Github SSH keys settings](https://github.com/settings/keys) and past
 ```
 gedit ~/.ssh/id_rsa.pub
 ```
-If you are working on your own computer and do not already have SSH keys, generate them with `ssh-keygen`.
 
 ## Create a workspace
 We recommend using [Catkin tools](https://catkin-tools.readthedocs.io/en/latest/), which is a replacement for `catkin_make` from the ROS tutorials.
