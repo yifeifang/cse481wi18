@@ -6,4 +6,3 @@ Welcome to the CSE 481C! A list of labs for the class is below.
 
 ## Week 1
 - [[Getting set up]]
-- [[Productivity tips]]
