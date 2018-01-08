@@ -3,3 +3,5 @@
 - [ROS C++ Overview](http://wiki.ros.org/roscpp/Overview)
 
 - [Fetch documentation](http://docs.fetchrobotics.com/)
+
+- [Class website](https://sites.google.com/view/cse481wi18/home)
