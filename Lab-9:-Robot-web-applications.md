@@ -1,5 +1,4 @@
 [Robot Web Tools](http://robotwebtools.org/tools.html) is a set of JavaScript libraries that lets web browsers communicate with ROS nodes.
-It is not officially developed by ROS, but it is commonly used in the community.
 
 # Web architecture
 Unlike the C++ and Python implementations of ROS, the ROS JavaScript library (roslibjs) does not communicate directly with the master or with other nodes.
@@ -24,12 +23,14 @@ However, you can also serve the website from any computer (such as using cloud h
 Robot Web Tools will help us develop web-based frontends for the robot.
 However, keep in mind that you need to implement the functionality on the robot.
 We refer to this as the backend.
-Typically, your backend will just be a ROS node that exposes topics or services that your web frontend can use.
+Typically, your backend will be a ROS node that exposes topics or services that your web frontend can use.
 
-# Robot web tools tutorials
-Go to the [Robot Web Tools](http://robotwebtools.org/tools.html) website.
-Notice that each of the three libraries, roslibjs, ros2djs, and ros3djs, have tutorials.
-Tutorial 1 ([Writing an actionlib client](http://wiki.ros.org/roslibjs/Tutorials/ActionlibClient)) and Tutorial 3 ([Basic ROS functionality](http://wiki.ros.org/roslibjs/Tutorials/BasicRosFunctionality)) of the [roslibjs tutorials](http://wiki.ros.org/roslibjs/Tutorials) will be especially helpful.
+## Concurrent development of backend and frontend
+Your team can have a web team that works concurrently with the robot team.
+If you are testing a backend and the frontend is not yet completed, you can send messages using `rostopic pub`, call services using `rosservice call`, or call actions by writing a small Python action client.
+
+If you are testing a frontend and the backend is not yet completed, you can similarly simulate the behavior of the backend using `rostopic pub`.
+Typically, the frontend and backend will interface only using ROS communication mechanisms.
 
 # Create a web teleop package
 In this lab, we will start developing the starter code for a web-based teleoperation interface.
