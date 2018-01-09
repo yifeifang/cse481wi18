@@ -1,5 +1,8 @@
 Welcome to the CSE 481C! A list of labs for the class is below.
 
+## Week 1
+- [[Getting set up]]
+
 ## Week 2
 - [[Lab 0: Introduction and ROS tutorials]]
 - [[Lab 1: Starting ROS and the Fetch simulator and getting the starter code]]
@@ -11,5 +14,3 @@ Welcome to the CSE 481C! A list of labs for the class is below.
 - [[Lab 7: Controlling the arm]]
 - [[Lab 8: Reading joint states]]
 
-## Week 1
-- [[Getting set up]]
