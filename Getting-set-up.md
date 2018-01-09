@@ -74,3 +74,6 @@ export LIBGL_ALWAYS_SOFTWARE=1
 ## Dual-boot
 You can install Ubuntu 14.04 on your own computer.
 You can search online for how to do this or ask the course staff for help.
+
+## Ubuntu 14.04 setup
+If you have installed Ubuntu 14.04 via dual-booting or a virtual machine, follow the [course software installation instructions](https://github.com/cse481wi18/cse481wi18/tree/indigo-devel/course_setup).
