@@ -13,4 +13,4 @@ Welcome to the CSE 481C! A list of labs for the class is below.
 - [[Lab 6: Controlling the head]]
 - [[Lab 7: Controlling the arm]]
 - [[Lab 8: Reading joint states]]
-
+- [[Lab 9: Robot web tools]]
