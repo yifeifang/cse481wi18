@@ -90,6 +90,12 @@ Now, on your own web browser, visit HOSTNAME:8080 (or whatever port your webpage
 
 After making edits, you can simply refresh the web browser to see your updated site.
 
+# Display the torso height
+
+# Send a new torso height
+
+# Camera image
+
 # Using other frameworks
 You can use [Robot Web Tools](http://wiki.ros.org/roslibjs/Tutorials) to interface with ROS using other web programming frameworks.
 As of Winter 2018, the Robot Web Tools project has had issues with its CDN not working, so please contact the course staff if you have problems.
