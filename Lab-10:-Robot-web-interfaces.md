@@ -58,6 +58,38 @@ bower install --save jstnhuang/ros-topic
 bower install --save jstnhuang/ros-action-client
 ```
 
+# Web application structure
+- **index.html**: Sets up the webpage to use web components. It is a simple webpage that imports your "main" web component, `web-teleop-app`.
+- **src/**: Here are where you place your elements.
+- **bower.json**: Lists the elements you will want to import into your project. When other developers clone your code, they can run `bower update` to make `bower` download all the needed elements and save them into the `bower_components/` folder.
+- **bower_components/**: All the elements you are using, not written by you, are saved here. This should not be checked into source control. Instead, developers will run `bower update`.
+
+We recommend flattening the structure of the `src` folder:
+```
+cd frontend
+mv src/web-teleop-app/web-teleop-app.html src/web-teleop-app.html
+rm -r src/web-teleop-app
+```
+
+Next, edit `index.html` and change the import path:
+```diff
+- <link rel="import" href="/src/web-teleop-app/web-teleop-app.html">
++ <link rel="import" href="/src/web-teleop-app.html">
+```
+
+# Build and development cycle
+To see your website, run `polymer serve` from the frontend folder.
+Then, visit the URL given back to you in a web browser.
+
+By default, this serves the website on `localhost`, meaning that you have to view the webpage on the same computer.
+If you are developing remotely (such as via SSH), then specify the hostname of the computer you are developing on:
+```
+polymer serve --hostname HOSTNAME
+```
+Now, on your own web browser, visit HOSTNAME:8080 (or whatever port your webpage is being served on).
+
+After making edits, you can simply refresh the web browser to see your updated site.
+
 # Using other frameworks
 You can use [Robot Web Tools](http://wiki.ros.org/roslibjs/Tutorials) to interface with ROS using other web programming frameworks.
 As of Winter 2018, the Robot Web Tools project has had issues with its CDN not working, so please contact the course staff if you have problems.
