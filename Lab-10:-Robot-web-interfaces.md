@@ -161,6 +161,8 @@ roslaunch rosbridge_server rosbridge_websocket.launch
 Now, the app should connect to the websocket server after you reload the page.
 
 # Display the torso height
+To display the torso height, your app will subscribe to the topic being published by the joint_state_republisher from Lab 9.
+
 
 # Send a new torso height
 
