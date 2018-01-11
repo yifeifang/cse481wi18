@@ -150,6 +150,16 @@ And display the status in the HTML section of your element:
 {{status}}
 ```
 
+## Test the connection
+If your backend is running, then when you refresh the page, you should see "Connected to the websocket server."
+If your backend is not running, it should say "Closed connection to the websocket server."
+If you or your backend team has not reached the end of Lab 9 yet, then you can run:
+```
+roslaunch rosbridge_server rosbridge_websocket.launch
+```
+
+Now, the app should connect to the websocket server after you reload the page.
+
 # Display the torso height
 
 # Send a new torso height
