@@ -4,7 +4,7 @@ Welcome to the CSE 481C! A list of labs for the class is below.
 - [[Getting set up]]
 
 ## Week 2
-Note: After Lab 4, it is possible for one or two members of your team to split off and go straight to Lab 10 (read over Lab 9 and do the Robot Web Tools tutorials first).
+Note: After Lab 4, it is possible for one or two members of your team to split off and go straight to Lab 10 (read over Lab 9 first).
 
 - [[Lab 0: Introduction and ROS tutorials]]
 - [[Lab 1: Starting ROS and the Fetch simulator and getting the starter code]]
