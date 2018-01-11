@@ -97,7 +97,58 @@ Now, on your own web browser, visit HOSTNAME:8080 (or whatever port your webpage
 After making edits, you can simply refresh the web browser to see your updated site.
 
 # Connect to the websocket server
+Edit `src/web-teleop-app.html`.
+First, import the `<ros-websocket>` element :
 
+```diff
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
++ <link rel="import" href="../bower_components/ros-websocket/ros-websocket.html">
+```
+
+Add the `<ros-websocket>` element and a title to your app:
+```html
+<ros-websocket auto ros="{{ros}}"
+  url="{{url}}"
+  on-connection="_handleConnection"
+  on-close="_handleClose"
+  on-error="_handleError"></ros-websocket>
+
+<h1>Fetch teleop</h1>
+```
+
+Look at the [documentation](https://www.webcomponents.org/element/jstnhuang/ros-websocket/elements/ros-websocket) for `<ros-websocket>` to learn more about the element and its API.
+
+- **auto**: Adding this boolean property means that the element will try to establish the websocket connection immediately.
+- **ros**: After the connection is made, the element will store a data structure representing the connection to a variable. We store this in a variable called `ros` using the double curly-brace notation.
+- **url**: This property gives the URL of the websocket server. The websocket server's URL is inferred from the URL of the webpage and saved into the `url` variable using the double curly-brace notation. You can override it with a different URL by assigning a new URL to the `url` variable.
+- **on-EVENT**: When elements fire events, you can handle the events by adding `on-EVENTNAME` attributes and supplying the function names of the handlers.
+
+Now, add the handlers:
+
+```js
+static get properties() {
+  return {};     
+}        
+               
+_handleConnection() {
+  this.status = 'Connected to the websocket server.';
+  console.log(this.status);
+}
+_handleClose() {
+  this.status = 'Closed connection to the websocket server.';
+  console.log(this.status);
+}
+_handleError() {
+  this.status = 'Error connecting to the websocket server.';
+  console.log(this.status);
+}
+```
+
+And display the status in the HTML section of your element:
+```html
+<h1>Fetch teleop</h1>
+{{status}}
+```
 
 # Display the torso height
 
