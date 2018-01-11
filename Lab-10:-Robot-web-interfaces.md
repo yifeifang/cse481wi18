@@ -44,7 +44,7 @@ echo bower_components/ > .gitignore
 You can use web components developed by anyone in the world by adding it to your `bower.json` file.
 You can also run `bower install --save GITHUB_ID/REPO_NAME` in your frontend folder.
 
-You can find web components to use at `https://webcomponents.org`.
+You can find web components to use at https://webcomponents.org.
 The ROS web components are located at: https://www.webcomponents.org/collection/jstnhuang/ros-element-collection
 
 For this project, you will need `ros-websocket`, `ros-topic`, and `ros-action-client`.
@@ -77,6 +77,12 @@ Next, edit `index.html` and change the import path:
 + <link rel="import" href="/src/web-teleop-app.html">
 ```
 
+Edit `src/web-teleop-app.html` to change the import path:
+```diff
+- <link rel="import" href="../../bower_components/polymer/polymer-element.html">
++ <link rel="import" href="../bower_components/polymer/polymer-element.html">
+```
+
 # Build and development cycle
 To see your website, run `polymer serve` from the frontend folder.
 Then, visit the URL given back to you in a web browser.
@@ -89,6 +95,9 @@ polymer serve --hostname HOSTNAME
 Now, on your own web browser, visit HOSTNAME:8080 (or whatever port your webpage is being served on).
 
 After making edits, you can simply refresh the web browser to see your updated site.
+
+# Connect to the websocket server
+
 
 # Display the torso height
 
