@@ -15,5 +15,5 @@ Note: After Lab 4, it is possible for one or two members of your team to split o
 - [[Lab 6: Controlling the head]]
 - [[Lab 7: Controlling the arm]]
 - [[Lab 8: Reading joint states]]
-- [[Lab 9: Robot web tools]]
+- [[Lab 9: Robot web applications]]
 - [[Lab 10: Robot web interfaces]]
