@@ -147,7 +147,7 @@ _handleError() {
 And display the status in the HTML section of your element:
 ```html
 <h1>Fetch teleop</h1>
-{{status}}
+[[status]]
 ```
 
 ## Test the connection
@@ -159,10 +159,93 @@ roslaunch rosbridge_server rosbridge_websocket.launch
 ```
 
 Now, the app should connect to the websocket server after you reload the page.
+You should see "Connected to the websocket server" on the webpage, and the same message in the JavaScript console (Ctrl+Shift+K in Firefox or Ctrl+Shift+J in Chrome).
+
+# Data binding syntax
+Both the square bracket `[[status]]` and the curly bracket `{{url}}` are used in Polymer to add JavaScript variables to HTML templates.
+The square bracket means "read-only," while the curly bracket means the variable could be changed.
+If you are unsure what to use, just use the curly brackets.
 
 # Display the torso height
-To display the torso height, your app will subscribe to the topic being published by the joint_state_republisher from Lab 9.
+To display the torso height, your app will subscribe to the topic being published by the joint_state_republisher from Lab 9, using the [`<ros-topic>`](https://www.webcomponents.org/element/jstnhuang/ros-topic) element.
+It will then display the torso height on the page.
 
+First, import the `<ros-topic>` element:
+```diff
+<link rel="import" href="../bower_components/ros-websocket/ros-websocket.html">
++ <link rel="import" href="../bower_components/ros-topic/ros-topic.html">
+```
+
+Next, add the `<ros-topic>` element to the DOM:
+```html
+<ros-topic auto
+  ros="{{ros}}"
+  topic="joint_state_republisher/torso_lift_joint"
+  msg-type="std_msgs/Float64"
+  last-message="{{torsoHeight}}"
+  on-message="_handleTorsoHeight"
+></ros-topic>
+<h1>Fetch teleop</h1>
+```
+
+Let's take a look at all of the properties of this element. You can read more in `<ros-topic>`s [online documentation](https://www.webcomponents.org/element/jstnhuang/ros-topic).
+- **auto**: This specifies that we should subscribe to the topic immediately.
+- **ros**: This passes in the WebSocket connection handle from `<ros-websocket>` to `<ros-topic>`.
+- **topic**: The name of the topic to subscribe to.
+- **msg-type**: The message type for this topic, given as `package_name/MessageName"
+- **last-message**: This assigns the most recently published message to the `torsoHeight` variable
+- **on-message**: (Optional in this case). This assigns a callback, `_handleTorsoHeight`, to be called whenever a message is received on the topic. In this case, we only care about the most recent message, and we already assign that message to the `torsoHeight` variable, so we don't need.
+
+Now, add the torso height to the DOM:
+```html
+<div>
+  Torso height: [[torsoHeight.data]] meters
+</div>
+```
+
+## Introspecting message formats
+Why do we use `torsoHeight.data` instead of `torsoHeight` directly?
+If you try using `torsoHeight`, you will see it rendered as `[object Object]`.
+If you try to render a JavaScript object as text, this is what you will see.
+Instead, you must render specific fields in the JavaScript object.
+
+We know that this topic is of type `std_msgs/Float64`.
+Run `rosmsg show std_msgs/Float64`, and you will see that it contains a single field, `data`.
+So, we must render the `data` field specifically.
+
+Another way to examine the message type is to use the callback method, `_handleTorsoHeight`.
+Add this to the JavaScript section of your element:
+```js
+_handleTorsoHeight(evt) {
+  var msg = evt.detail;
+  console.log(msg);
+}
+```
+
+Refresh the page and open the JavaScript console, and you should see the message being printed in the console.
+
+## Rounding
+You should see the torso height apparently fluctuating quite a bit.
+However, it is fluctuating in a very small range near zero.
+To make the display cleaner, we will add a function that rounds the data:
+
+```js
+// Rounds val to a given precision, where the precision is given as the    
+// step size between numbers in the output range.                          
+// E.g., _round(0.053, 0.1) = 0.1                                          
+// E.g., _round(0.053, 0.01) = 0.05                                        
+// E.g., _round(0.053, 0.001) = 0.053                                      
+_round(val, precision) {                                                   
+  return Math.round(val/precision) * precision;                            
+}
+```
+
+You can apply functions to values using the double bracket syntax.
+```html
+<div>
+  Torso height: [[_round(torsoHeight.data, 0.001)]] meters
+</div>
+```
 
 # Send a new torso height
 
