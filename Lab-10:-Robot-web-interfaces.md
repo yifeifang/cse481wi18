@@ -203,6 +203,15 @@ Now, add the torso height to the DOM:
 </div>
 ```
 
+You should now see the torso height being rendered on the page.
+
+### Lab 9 not done yet?
+It is easy for frontend and backend teams to work concurrently.
+If the backend is not ready yet, publish some simulated data:
+```
+rostopic pub /joint_state_republisher/torso_lift_joint std_msgs/Float64 "data: 0.123"
+```
+
 ## Introspecting message formats
 Why do we use `torsoHeight.data` instead of `torsoHeight` directly?
 If you try using `torsoHeight`, you will see it rendered as `[object Object]`.
