@@ -41,7 +41,7 @@ In the starter project, we will have a web interface that allows us to:
 
 This should give you an idea of how to implement the rest of the interface for your assignment.
 
-![image](https://cloud.githubusercontent.com/assets/1175286/24991283/91d75fd8-1fce-11e7-8292-982a51123984.png)
+![image](https://user-images.githubusercontent.com/1175286/34969332-308873ae-fa23-11e7-92da-50bd5152cca1.png)
 
 Create the package `web_teleop`:
 ```
