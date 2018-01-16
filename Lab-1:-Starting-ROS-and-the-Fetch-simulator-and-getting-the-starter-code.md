@@ -82,9 +82,9 @@ Your team will back up your code to Github as part of the CSE 481C Github organi
 To do this, first change the url of the `origin` remote.
 **Change teamNUMBER** to team1, team2, etc.:
 ```
-git remote set-url origin git@github.com:cse481sp17/teamNUMBER.git
+git remote set-url origin git@github.com:cse481wi18/teamNUMBER.git
 git push -u origin indigo-devel
 ```
 
 Do this now.
-Verify that your code has been pushed by visiting https://github.com/cse481sp17/teamNUMBER.
+Verify that your code has been pushed by visiting https://github.com/cse481wi18/teamNUMBER.
