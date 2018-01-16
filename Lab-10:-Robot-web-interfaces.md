@@ -55,7 +55,7 @@ To import them into your project:
 cd frontend
 bower install --save jstnhuang/ros-websocket
 bower install --save jstnhuang/ros-topic
-bower install --save jstnhuang/ros-action-client
+bower install --save jstnhuang/ros-service
 ```
 
 # Web application structure
@@ -161,6 +161,8 @@ roslaunch rosbridge_server rosbridge_websocket.launch
 Now, the app should connect to the websocket server after you reload the page.
 You should see "Connected to the websocket server" on the webpage, and the same message in the JavaScript console (Ctrl+Shift+K in Firefox or Ctrl+Shift+J in Chrome).
 
+![image](https://user-images.githubusercontent.com/1175286/34966748-d6feb100-fa12-11e7-9a4b-7eae302607e0.png)
+
 # Data binding syntax
 Both the square bracket `[[status]]` and the curly bracket `{{url}}` are used in Polymer to add JavaScript variables to HTML templates.
 The square bracket means "read-only," while the curly bracket means the variable could be changed.
@@ -203,7 +205,9 @@ Now, add the torso height to the DOM:
 </div>
 ```
 
-You should now see the torso height being rendered on the page.
+You should now see the torso height being rendered on the page:
+
+![image](https://user-images.githubusercontent.com/1175286/34966761-f045a4d4-fa12-11e7-8001-f400d04adf54.png)
 
 ### Lab 9 not done yet?
 It is easy for frontend and backend teams to work concurrently.
@@ -256,9 +260,134 @@ You can apply functions to values using the double bracket syntax.
 </div>
 ```
 
+![image](https://user-images.githubusercontent.com/1175286/34966769-087a07c0-fa13-11e7-8ffb-2727bd99df1e.png)
+
 # Send a new torso height
+To set a new torso height, the backend from Lab 9 exposes a service, `web_teleop/set_torso`.
+The frontend can call this service using the [`<ros-service>`](https://www.webcomponents.org/element/jstnhuang/ros-service) element.
+
+## Using 3rd party elements
+You can use a standard HTML input to make a slider, but for fun, let's try using a Material Design slider.
+You can browse various [Material Design UI elements](https://www.webcomponents.org/collection/PolymerElements/paper-elements) on webcomponents.org.
+
+We will use a [slider](https://www.webcomponents.org/element/PolymerElements/paper-slider/elements/paper-slider) to set the desired torso height, and a [button](https://www.webcomponents.org/element/PolymerElements/paper-button/elements/paper-button) to issue the command.
+
+On webcomponents.org, look at the top left where it says "Licensed under BSD" etc.
+Click on the "+" sign to see the installation commands.
+Run the commands in the `frontend` folder:
+
+```
+bower install --save PolymerElements/paper-button
+bower install --save PolymerElements/paper-slider
+```
+
+Now, import those elements in `web-teleop-app.html`:
+```html
+<link rel="import" href="../bower_components/paper-button/paper-button.html">    
+<link rel="import" href="../bower_components/paper-slider/paper-slider.html">
+```
+
+Now, add the elements to the DOM:
+```html
+<div>                                                                        
+  Torso height: [[_round(torsoHeight.data, 0.001)]] meters                   
+</div>                                                                       
+<div class="layout horizontal center">                                       
+  <paper-slider min="0" max="0.4" step="0.01" editable                       
+    value="{{desiredTorsoHeight}}"></paper-slider>                           
+  <paper-button>Set torso</paper-button>                                     
+</div>
+```
+
+We will add a bit of styling to improve how it looks:
+
+Import the `<iron-flex-layout>` classes, a powerful tool for CSS box layouts:
+```
+<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+```
+
+Include the styles:
+```html
+<style is="custom-style" include="iron-flex"></style>
+<style>
+  :host {
+    ...
+```
+
+Add the following styles to the second `<style>` tag:
+```css
+:host {
+  display: block;
+}
+paper-slider {                                                             
+  --paper-slider-input: {                                                  
+    width: 100px;                                                          
+  }                                                                        
+}                                                                          
+paper-button {                                                             
+  background-color: #eee;                                 
+}
+```
+
+The interface should now look like this:
+![image](https://user-images.githubusercontent.com/1175286/34966721-9f5e3252-fa12-11e7-96a9-41caced94319.png)
+
+## Make the service call
+You can call services using the [`<ros-service>`](https://www.webcomponents.org/element/jstnhuang/ros-service) element.
+
+Import the element:
+```diff
+<link rel="import" href="../bower_components/ros-topic/ros-topic.html">          
++ <link rel="import" href="../bower_components/ros-service/ros-service.html">
+```
+
+Click "Documentation" on the `<ros-service>` documentation page to see example uses and its API.
+Based on this, you should be able to come up with the right usage of `<ros-service>`:
+
+```html
+<ros-service                                                                 
+  id="torsoService"
+  on-response="_handleTorsoSuccess"
+  on-fail="_handleTorsoError"
+  name="/web_teleop/set_torso"
+  ros="{{ros}}"
+  service-type="web_teleop/SetTorso"
+></ros-service>
+```
+
+Let's look at the properties we have set:
+- **id**: This is a standard HTML attribute. Anything with an `id` can be accessed in our JavaScript code using `this.$.MYID`
+- **on-response**: Callback to call once the service call succeeds. The service's `Response` is given as `evt.detail`
+- **on-fail**: Callback if the service call fails.
+- **name**: The name of the service to call.
+- **ros**: A handle to the WebSocket connection from `<ros-websocket>`
+- **service-type**: The type of the service.
+
+We also need to create a handler for pushing the "Set Torso" button:
+```html
+<paper-button on-tap="_setTorso">Set torso</paper-button>
+```
+
+Finally, let's add all the necessary callback functions:
+```js
+_setTorso() {
+  this.status = 'Setting torso to ' + this.desiredTorsoHeight + ' meters...';
+  this.$.torsoService.call({height: this.desiredTorsoHeight});
+}
+_handleTorsoSuccess() {
+  this.status = 'Set torso to ' + this.desiredTorsoHeight + ' meters.';
+}
+_handleTorsoError(evt) {
+  this.status = 'Error: ' + evt.detail;
+}
+```
+
+You should now be able to set the torso height of the robot from the web!
+
+# Publish a message
 
 # Camera image
+
 
 # Using other frameworks
 You can use [Robot Web Tools](http://wiki.ros.org/roslibjs/Tutorials) to interface with ROS using other web programming frameworks.
