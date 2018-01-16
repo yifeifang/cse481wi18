@@ -96,6 +96,63 @@ Now, on your own web browser, visit HOSTNAME:8080 (or whatever port your webpage
 
 After making edits, you can simply refresh the web browser to see your updated site.
 
+# Anatomy of an element
+Look at `src/web-teleop-app.html`.
+This is the main element of the teleoperation app.
+In the future, we will show how to break down a complex app into multiple elements.
+For now, we will develop the entire application within this one element.
+
+This file contains a combination of HTML, CSS, and JavaScript.
+Below, we provide a diagram of an element:
+
+```html
+<!-- IMPORTS
+     Here is where you import the elements used in this file, similar to imports in other programming languages.
+-->
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/ros-websocket/ros-websocket.html">
+...
+
+<dom-module id="web-teleop-app">
+  <template>
+    <style>
+      <!-- CSS STYLE RULES
+           CSS style rules you add here only affect the HTML defined in this file.
+           If you are interested in more advanced techniques like sharing styles across elements, ask the course staff.
+      -->
+      :host {
+        display: block;
+      }
+    </style>
+    <!-- HTML TEMPLATE
+         Here is where you add the HTML for your element.
+         There is special syntax for binding JavaScript variables in your template.
+    -->
+    <h1>Fetch teleop</h1>
+  </template>
+  <script>
+    /*
+      JAVASCRIPT SECTION
+      Here is where you add the code that controls the behavior of the element.
+    */
+    
+    class WebTeleopApp extends Polymer.Element {
+      static get is() { return 'web-teleop-app'; }
+      // List properties here, which we will not use in this lab.
+      static get properties() {
+        return {
+        };
+      }
+      
+      doSomething() {
+        console.log('Doing something');
+      }
+    }
+    window.customElements.define(WebTeleopApp.is, WebTeleopApp);
+  </script>
+</dom-module>
+```
+
 # Connect to the websocket server
 Edit `src/web-teleop-app.html`.
 First, import the `<ros-websocket>` element :
