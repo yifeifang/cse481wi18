@@ -495,9 +495,78 @@ paper-button {
 Also, be sure to add `evt.preventDefault()` to the beginning of all your driving button callbacks.
 If your robot drives uncontrollably, a last-ditch effort you can do is to refresh the browser page, which should destroy your timer.
 
+# Test on mobile
+Smartphone interfaces are, by now, a necessity for consumer products.
+Luckily, your website can be developed in such a way that it works on both desktop and mobile browsers.
+
+To test your website on mobile, you must serve your website to the public internet.
+Close the Polymer development server (where you ran `polymer serve`) and re-run it with an extra option:
+```
+polymer serve -H 0.0.0.0
+```
+
+Find out the IP address of your desktop computer by typing `ifconfig`.
+Then, on your phone, access your webpage at `IPADRESS:8081/`.
+You should be able to drive the robot around on your phone.
+
 # Camera image
 
+Finally, let's add the image from the robot's camera to the webpage.
+
+To do this, install the Web Video Server (also from Robot Web Tools):
+```
+sudo apt-get install ros-indigo-web-video-server
+```
+
+Then, add it to your `backend.launch`:
+```xml
+<node pkg="web_video_server" type="web_video_server" name="web_video_server">
+  <param name="port" value="8000" />
+</node>
+```
+Here we tell the web video server to run on port 8000.
+
+Run your backend again and visit http://localhost:8000/stream_viewer?topic=/head_camera/rgb/image_raw.
+You should see the view from the robot's head-mounted camera.
+
+Now, add an image to the DOM:
+```html
+{{status}}
+<div id="camera">
+  <img src="//[[hostname]]:8000/stream?topic=/head_camera/rgb/image_raw"></img>
+</div>
+```
+
+Here, we are going to compute what the URL should be.
+While developing on your desktop, the hostname of the webpage is typically `localhost`.
+However, this is not true for your phone.
+From your phone's perspective, `localhost` refers to the phone.
+
+We only need to figure out what the hostname is once, when the page is loaded.
+We can do one-time initialization in a special `ready()` method in the JavaScript section of your element:
+
+```js
+ready() {
+  super.ready();
+  this.hostname = window.location.hostname;
+}
+```
+
+If you test this on mobile, you will see that the image extends past the width of your screen.
+As a final refinement, add CSS rules to the `<style>` tag to automatically resize the image to fit:
+```css
+#camera img {
+  width: 100%
+  height: auto;
+}
+```
+
+This is what your teleop interface should look like:
+
+![image](https://user-images.githubusercontent.com/1175286/34969332-308873ae-fa23-11e7-92da-50bd5152cca1.png)
 
 # Using other frameworks
-You can use [Robot Web Tools](http://wiki.ros.org/roslibjs/Tutorials) to interface with ROS using other web programming frameworks.
+In this lab, we have shown how to use Polymer to build robot web interfaces.
+If you prefer to program with other web programming frameworks, you should refer to the [Robot Web Tools](http://wiki.ros.org/roslibjs/Tutorials).
+The ROS elements (`<ros-websocket>`, `<ros-topic>`, etc.) are simple wrappers for the Robot Web Tools library.
 As of Winter 2018, the Robot Web Tools project has had issues with its CDN not working, so please contact the course staff if you have problems.
