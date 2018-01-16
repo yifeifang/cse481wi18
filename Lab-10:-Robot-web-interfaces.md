@@ -513,6 +513,7 @@ All of the driving buttons can use the same `_endBaseCommand` function, but they
 ```js
 _startForward(evt) {
   evt.preventDefault(); // Prevent right-click menu from showing up after long press on mobile
+  this.status = 'Driving forward...';
   var baseTopic = this.$.baseTopic; // Get <ros-topic>
   if (this.baseCommand) {
     // The timer should not be set at this point, but clear it just in case
@@ -535,6 +536,7 @@ _startForward(evt) {
 }
 
 _endBaseCommand(evt) {
+  this.status = 'Stopped driving.';
   clearInterval(this.baseCommand);
 }
 ```
