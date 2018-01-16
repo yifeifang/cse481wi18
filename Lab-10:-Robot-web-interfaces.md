@@ -330,6 +330,7 @@ paper-button {
 ```
 
 The interface should now look like this:
+
 ![image](https://user-images.githubusercontent.com/1175286/34966721-9f5e3252-fa12-11e7-96a9-41caced94319.png)
 
 ## Make the service call
@@ -385,6 +386,114 @@ _handleTorsoError(evt) {
 You should now be able to set the torso height of the robot from the web!
 
 # Publish a message
+Let's add a button to drive the robot forward (implementing left/right turns and backward movement is up to you).
+
+To publish to a topic, we will again use the [`<ros-topic>`](https://www.webcomponents.org/element/jstnhuang/ros-topic/elements/ros-topic) element.
+This time, setting up the topic is relatively simple:
+```html
+<ros-topic
+  id="baseTopic"
+  ros="{{ros}}"
+  topic="cmd_vel"
+  msg-type="geometry_msgs/Twist"
+></ros-topic>
+```
+
+Note that we do not use the `auto` property, which causes the element to automatically *subscribe* to the topic.
+However, we do need to add an `id` so that we can access this element in our JavaScript code.
+
+## DOM setup
+In this section, we will show how to create a grid of buttons for moving forward/backward and turning.
+
+First, add this to the DOM:
+```html
+<div id="driving" class="layout vertical">
+  <div class="layout horizontal">
+    <div class="flex"></div>
+    <paper-button
+      on-down="_startForward"
+      on-up="_endBaseCommand"
+    >Forward</paper-button>
+    <div class="flex"></div>
+  </div>
+  <div class="layout horizontal">
+    <paper-button>Left</paper-button>
+    <paper-button>Back</paper-button>
+    <paper-button>Right</paper-button>
+  </div>
+</div>
+```
+
+This creates a vertical layout consisting of two horizontal layouts.
+Within each horizontal layout, we place a row of buttons.
+Empty `<div class="flex"></div>` tags are automatically sized to fill space equally on either side of the button.
+Looking at the page, the first row will look a bit odd: it will be centered on the page while the bottom row is not.
+This is because the `flex` divs are expanding to fill the entire width of the web page.
+
+To fix this, add this CSS rule to the `<style>` section.
+This causes the `<div id="driving">` to only be as wide as necessary.
+```css
+#driving {
+  display: inline-block;
+}
+```
+
+The page should now look like this:
+
+![image](https://user-images.githubusercontent.com/1175286/34968334-8306a764-fa1d-11e7-82a3-6a6eae03d86f.png)
+
+## Velocity commands
+One tricky aspect of this feature is that we would like to continuously send velocity commands to the base while the user holds down a button.
+Once the user lets go, we want to stop sending velocity commands, which will cause the robot to stop driving.
+In our JavaScript frontend, we cannot spawn a thread to do this.
+Instead, we must register a function that sends the velocity commands at regular intervals.
+When the user lets go of a button, we then unregister that callback.
+In other words, we will use [setInterval](https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/setInterval) and [clearInterval](https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/clearInterval).
+
+We have already added the `on-down` and `on-up` event handlers to `paper-button`.
+All of the driving buttons can use the same `_endBaseCommand` function, but they will need slightly different `_startDIRECTION` functions:
+
+```js
+_startForward(evt) {
+  evt.preventDefault(); // Prevent right-click menu from showing up after long press on mobile
+  var baseTopic = this.$.baseTopic; // Get <ros-topic>
+  if (this.baseCommand) {
+    // The timer should not be set at this point, but clear it just in case
+    clearInterval(this.baseCommand);
+  }
+  this.baseCommand = setInterval(function() {
+    baseTopic.publish({
+      linear: {
+        x: 0.1, // Set positive or negative meters/s to drive
+        y: 0,
+        z: 0
+      },
+      angular: {
+        x: 0,
+        y: 0,
+        z: 0 // Set rads/s to turn
+      }
+    });
+  }, 10); // Run this function every 10ms, or approximately 100 times per second.
+}
+
+_endBaseCommand(evt) {
+  clearInterval(this.baseCommand);
+}
+```
+
+On mobile devices, long-pressing on a button may be interpreted as a text selection action.
+This can cause the mouse up event to not be called, which is a safety risk.
+To ensure this doesn't happen, add the following CSS:
+```diff
+paper-button {
+  background-color: #eee;
++  user-select: none;
+}
+```
+
+Also, be sure to add `evt.preventDefault()` to the beginning of all your driving button callbacks.
+If your robot drives uncontrollably, a last-ditch effort you can do is to refresh the browser page, which should destroy your timer.
 
 # Camera image
 
