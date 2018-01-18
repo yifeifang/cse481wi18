@@ -88,3 +88,5 @@ git push -u origin indigo-devel
 
 Do this now.
 Verify that your code has been pushed by visiting https://github.com/cse481wi18/teamNUMBER.
+If you do not see your code, switch to the `indigo-devel` branch.
+If possible, change default branch from `master` to `indigo-devel` and delete the `master` branch.
