@@ -170,8 +170,9 @@ CATKIN_DEPENDS message_runtime roscpp rospy
 
 ### package.xml
 In `package.xml`:
-- Add `<build_depend>message_generation</build_depend>
-- Add `<run_depend>message_runtime</run_depend>
+- Add `<build_depend>message_generation</build_depend>`
+- Add `<build_export_depend>message_runtime</build_export_depend>`
+- Add `<exec_depend>message_runtime</exec_depend>`
 
 Finally, run `catkin build` to build your service message.
 
