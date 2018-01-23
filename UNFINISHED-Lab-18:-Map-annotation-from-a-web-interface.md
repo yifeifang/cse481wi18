@@ -74,6 +74,8 @@ To finish the web interface, you will need to instrument the interface such that
 To work on the backend, you will need to subscribe the the `/user_actions` topic and add or remove poses as requested by the UserAction.
 A third component your team members can work on is the interactive marker interface.
 
+Below, we give a few instructions for the backend team, but the majority of the instructions are for the web frontend.
+
 # Download prereqs
 ```
 sudo apt-get install ros-indigo-rosbridge-server ros-indigo-tf2-web-republisher ros-indigo-interactive-marker-proxy
@@ -106,6 +108,31 @@ vim launch/map_annotator.launch
 </launch>
 ```
 
+# Interactive marker / backend team
+## Interactive marker interface
+Once a user creates a marker and gives it a name in the web interface, a new interactive marker should appear in (web) RViz at the ground level at the (0, 0, 0) position and unit orientation.
+The marker should be an arrow, so that the user can tell which way the Fetch will be facing in this pose.
+The user should be able to change the marker's position and orientation.
+As the pose of the marker is changed, the database (or whatever data structure you are using to store the poses) should be updated.
+And, if a pose is deleted from the web interface, the marker for that pose should disappear from RViz as well.
+
+**Hint:**
+Look at the *Chess Piece* marker in the [Interactive Markers Basic Controls tutorial](http://wiki.ros.org/rviz/Tutorials/Interactive%20Markers%3A%20Basic%20Controls) to get an idea of how to create a marker that can be dragged in the XY plane.
+To get it to rotate, you will need to add another control to the interactive marker, see the [InteractiveMarkerControl definition](http://docs.ros.org/indigo/api/visualization_msgs/html/msg/InteractiveMarkerControl.html) and figure out what that is.
+This control will not need any markers, because a rotation control renders a draggable ring by default.
+
+**Hint 2**:
+Your markers will be easier to click if you make the controls slightly off the ground.
+That way, the map visualization doesn't interfere with it.
+
+Here is an example of what your interactive marker might look like:
+![image](https://cloud.githubusercontent.com/assets/1175286/25220378/6c188fe0-2566-11e7-9735-c84cd1f6ee11.png)
+
+## Persisting data to disk
+The easiest way to do this is by simply using [pickle](https://docs.python.org/2/library/pickle.html) to save your data structure of poses to disk.
+You can register a function to run when the node is shutdown as described in [rospy: Initialization and Shutdown](http://wiki.ros.org/rospy/Overview/Initialization%20and%20Shutdown).
+Remember to reinitialize everything (web interface pose list, interactive markers) when the server starts up.
+
 # Frontend team
 Create the frontend:
 ```
@@ -132,14 +159,25 @@ bower install --save jstnhuang/ros-rviz
 echo "bower_components/" >> .gitignore
 ```
 
+As a reminder, you can find documentation for these three elements on https://webcomponents.org:
+- [`<ros-websocket>` API docs](https://www.webcomponents.org/element/jstnhuang/ros-websocket/elements/ros-websocket)
+- [`<ros-topic>` API docs](https://www.webcomponents.org/element/jstnhuang/ros-topic/elements/ros-topic)
+- [`<ros-rviz>` API docs](https://www.webcomponents.org/element/jstnhuang/ros-rviz/elements/ros-rviz) and [User Guide](https://github.com/jstnhuang/ros-rviz/wiki/User-guide)
+
 Run your web app and the map_annotator launch file:
 ```
 roslaunch map_annotator map_annotator.launch # Remember to re-launch whenever you add/edit messages
 polymer serve -H 0.0.0.0
 ```
 
+## "Flatten" your application (optional)
+
+
 ## Connect to the websocket server
 Connect to the websocket server similar to how you did in Lab 10.
+
+## Show the pose list
+
 
 Visit localhost:8080 in a web browser and open the JavaScript console.
 Now try publishing some latched messages to the `pose_names` topic:
@@ -151,32 +189,6 @@ rostopic pub /pose_names map_annotator/PoseNames "names:
 You should see "Test 1" and "Test 2" appear in the pose list with "Go to" and "Delete" buttons.
 
 ![image](https://cloud.githubusercontent.com/assets/1175286/25216800/21d53aee-2559-11e7-8c9c-de15cce503b3.png)
-
-# Interactive marker interface
-Once a user creates a marker and gives it a name in the web interface, a new interactive marker should appear in RViz at the ground level at the (0, 0, 0) position and unit orientation.
-The marker should be an arrow, so that the user can tell which way the Fetch will be facing in this pose.
-The user should be able to change the marker's position and orientation.
-As the pose of the marker is changed, the database (or whatever data structure you are using to store the poses) should be updated.
-And, if a pose is deleted from the web interface, the marker for that pose should disappear from RViz as well.
-
-Don't forget to add an InteractiveMarker display to RViz.
-
-**Hint:**
-Look at the *Chess Piece* marker in the [Interactive Markers Basic Controls tutorial](http://wiki.ros.org/rviz/Tutorials/Interactive%20Markers%3A%20Basic%20Controls) to get an idea of how to create a marker that can be dragged in the XY plane.
-To get it to rotate, you will need to add another control to the interactive marker, see the [InteractiveMarkerControl definition](http://docs.ros.org/indigo/api/visualization_msgs/html/msg/InteractiveMarkerControl.html) and figure out what that is.
-This control will not need any markers, because a rotation control renders a draggable ring by default.
-
-**Hint 2**:
-Your markers will be easier to click if you make the controls slightly off the ground.
-That way, the map visualization doesn't interfere with it.
-
-Here is an example of what your interactive marker might look like:
-![image](https://cloud.githubusercontent.com/assets/1175286/25220378/6c188fe0-2566-11e7-9735-c84cd1f6ee11.png)
-
-# Persisting data to disk
-The easiest way to do this is by simply using [pickle](https://docs.python.org/2/library/pickle.html) to save your data structure of poses to disk.
-You can register a function to run when the node is shutdown as described in [rospy: Initialization and Shutdown](http://wiki.ros.org/rospy/Overview/Initialization%20and%20Shutdown).
-Remember to reinitialize everything (web interface pose list, interactive markers) when the server starts up.
 
 # Testing on your phone
 Once your tool is working, you should be able to load the webpage from your phone by visiting `IP_ADDRESS:8081/` in a web browser.
