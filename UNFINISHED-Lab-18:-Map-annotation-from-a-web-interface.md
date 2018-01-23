@@ -51,8 +51,8 @@ roslaunch rosbridge_server rosbridge_websocket.launch
 
 # UserAction
 One technique for a web interface to communicate with the server is to treat the user's interaction with the interface as a stream of actions.
-In order words, you can publish a message to a topic (e.g., `/user_actions`) whenever the user takes some action in the interface (clicks the "Create" button, clicks a "Delete" button, etc.)
-In this way, you can test your backend by just publishing messages to the `/user_actions` topic, even if the frontend isn't finished yet.
+In order words, you can publish a message to a topic (e.g., `/map_annotator/user_actions`) whenever the user takes some action in the interface (clicks the "Create" button, clicks a "Delete" button, etc.)
+In this way, you can test your backend by just publishing messages to the `/map_annotator/user_actions` topic, even if the frontend isn't finished yet.
 This topic can also be recorded, analyzed, and played back for testing purposes.
 
 In this interface, all of the user actions can be specified with a `command` parameter that acts on a pose `name`.
@@ -63,18 +63,33 @@ Your `UserAction.msg` can look like this:
 string CREATE=create
 string DELETE=delete
 string GOTO=goto
-# string RENAME=rename
+# (optional) string RENAME=rename
 string command
 string name # The name of the pose the command applies to
 string updated_name # If command is RENAME, this is the new name of the pose
 ```
 
 At this point, your team should theoretically be able to work in two groups: one group that focuses on developing the web interface and another that focuses on developing the backend.
-To finish the web interface, you will need to instrument the interface such that it publishes the correct UserAction messages in response to button clicks.
-To work on the backend, you will need to subscribe the the `/user_actions` topic and add or remove poses as requested by the UserAction.
-A third component your team members can work on is the interactive marker interface.
 
-Below, we give a few instructions for the backend team, but the majority of the instructions are for the web frontend.
+The frontend team will build a web app that works like so:
+- The app subscribes to `/map_annotator/pose_names`, of type PoseNames and shows a list of poses
+- When the user presses "Create," they enter the name of a new pose and send the UserAction to the server
+- The user drags the interactive marker to the desired location
+- Next to each pose name is a "Go to" and "Delete" button. Clicking on either sends the appropriate UserAction to the server
+
+The backend team will build a server, based on the previous lab's command-line interface, that works like so:
+- The server publishes the list of saved poses to /map_annotator/pose_names as a PoseNames message.
+- Whenever a pose is added or deleted, the list gets republished (remember to set `latch=True` when creating the publisher)
+- The server subscribes to `map_annotator/user_actions`, and executes the commands as they come in
+- The server manages the interactive markers for all the poses
+- The server saves the poses to a file (using pickle or a database system of your choice) and loads them on startup
+
+Below, we give a few tips for the backend team.
+The rest of the lab is dedicated to building the frontend.
+
+Before splitting into two groups, you should decide on the exact message formats for `UserAction` and `PoseNames`.
+You should then create and build your messages.
+Once you have done so, you are ready to work concurrently.
 
 # Download prereqs
 ```
@@ -95,7 +110,7 @@ vim launch/map_annotator.launch
 <launch>
   <!-- Map annotator server -->
   <!-- You can pass command-line args to your server using the args attribute below. -->
-  <node pkg="map_annotator" type="server.py" name="map_annotator_server" args=""/>
+  <node pkg="map_annotator" type="server.py" name="map_annotator_server" args="$(env HOME)/our_pose_db_name.db"/>
 
   <!-- Web prereqs -->
   <include file="$(find rosbridge_server)/launch/rosbridge_websocket.launch" />
@@ -126,6 +141,7 @@ Your markers will be easier to click if you make the controls slightly off the g
 That way, the map visualization doesn't interfere with it.
 
 Here is an example of what your interactive marker might look like:
+
 ![image](https://cloud.githubusercontent.com/assets/1175286/25220378/6c188fe0-2566-11e7-9735-c84cd1f6ee11.png)
 
 ## Persisting data to disk
@@ -171,22 +187,125 @@ polymer serve -H 0.0.0.0
 ```
 
 ## "Flatten" your application (optional)
+As in [Lab 10](https://github.com/cse481wi18/cse481wi18/wiki/Lab-10%3A-Robot-web-interfaces), the web application template puts elements in `src/element-one/element-one.html`, `src/element-two/element-two.html`, etc.
+We recommend moving all the elements into the `src` folder.
+The rest of the lab will assume you have done so.
 
+```
+cd frontend
+mv src/map-annotator-app/map-annotator-app.html src/map-annotator-app.html
+rm -r src/map-annotator-app
+```
+
+In `index.html`:
+```diff
+- <link rel="import" href="/src/map-annotator-app/map-annotator-app.html">
++ <link rel="import" href="/src/map-annotator-app.html">
+```
+
+In `src/map-annotator-app.html`:
+```diff
+- <link rel="import" href="../../bower_components/polymer/polymer-element.html">
++ <link rel="import" href="../bower_components/polymer/polymer-element.html">
+```
 
 ## Connect to the websocket server
 Connect to the websocket server similar to how you did in Lab 10.
+- Import the `<ros-websocket>` element at the top of the file
+- Add the `<ros-websocket>` element to DOM
+- You may want to add console logs or a status message to show the connection status
 
 ## Show the pose list
+- Import `<ros-topic>`
+- Add `<ros-topic>` to your page and subscribe to `map_annotator/pose_names`. Use the `last-message` attribute to bind the topic to the most recently published message:
+  ```html
+  <ros-topic auto
+    ros="{{ros}}"
+    topic="map_annotator/pose_names"
+    msg-type="map_annotator/PoseNames"
+    last-message="{{poseNames}}"
+    on-message="_handlePoseNames"
+  ></ros-topic>
+  ```
 
+  Add a handler for the pose names, which can be useful for debugging:
+  ```js
+  _handlePoseNames(evt) {
+    var msg = evt.detail;
+    console.log('Pose list: ', msg);
+  }
+  ```
 
-Visit localhost:8080 in a web browser and open the JavaScript console.
-Now try publishing some latched messages to the `pose_names` topic:
+Open the JavaScript console (Ctrl+Shift+K in Firefox or Ctrl+Shift+J in Chrome) and try publishing some latched messages to the `pose_names` topic:
 ```
-rostopic pub /pose_names map_annotator/PoseNames "names:
+rostopic pub /map_annotator/pose_names map_annotator/PoseNames "names:
 - 'Test 1'
 - 'Test 2'"
 ```
-You should see "Test 1" and "Test 2" appear in the pose list with "Go to" and "Delete" buttons.
+
+You should see the poses you published in the console.
+
+Now, let's render the pose list in the DOM:
+```html
+<h2>Poses</h2>
+<template is="dom-repeat" items="[[poseNames.names]]">
+  <div>[[item]]</div>
+</template>
+```
+
+Refresh the page and you will see "Test 1" and "Test 2" appear in your app.
+
+![image](https://user-images.githubusercontent.com/1175286/35303207-00dbdf5a-0046-11e8-861a-774685933b40.png)
+
+## Create a new element
+Now, we will split our application into two components: one for the main app, and a new component that represents a pose.
+
+Create a file, `frontend/src/map-annotator-pose.html`:
+```html
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+
+<dom-module id="map-annotator-pose">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+    [[poseName]]
+  </template>
+
+  <script>
+    class MapAnnotatorPose extends Polymer.Element {
+      static get is() { return 'map-annotator-pose'; }
+      static get properties() {
+        return {
+          poseName: String,
+          ros: Object
+        };
+      }
+    }
+    window.customElements.define(MapAnnotatorPose.is, MapAnnotatorPose);
+  </script>
+</dom-module>
+```
+
+This element has two *properties*: `poseName` and `ros`.
+To use this element, you must specify these properties.
+First, import the new element into your main element:
+
+**map-annotator-app.html**:
+```diff
++ <link rel="import" href="map-annotator-pose.html">
+```
+
+Now use your element instead of the `<div>` we created earlier:
+
+```html
+<h2>Poses</h2>
+<template is="dom-repeat" items="[[poseNames.names]]">
+  <map-annotator-pose ros="[[ros]]" pose-name="[[item]]"></map-annotator-pose>
+</template>
+```
 
 ![image](https://cloud.githubusercontent.com/assets/1175286/25216800/21d53aee-2559-11e7-8c9c-de15cce503b3.png)
 
