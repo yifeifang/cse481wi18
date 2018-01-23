@@ -26,4 +26,4 @@ Note: After Lab 4, it is possible for one or two members of your team to split o
 - [[Lab 15: Driving with odometry]]
 - [[Lab 16: Mapping and navigation]]
 - [[Lab 17: Sending navigation goals]]
-- [[Lab 18: Map annotation from a web interface]]
+- [[Lab 18: Map annotation from a web interface]] (Coming Thursday, Jan 25)
