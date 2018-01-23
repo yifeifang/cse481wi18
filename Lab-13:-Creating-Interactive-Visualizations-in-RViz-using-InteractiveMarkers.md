@@ -112,3 +112,5 @@ You do not need to implement these, but look at the available documentation and 
 - Look at the Code API. How do you erase a marker from the server?
 - How do you add a right-click menu to a marker?
 - Our demo responds to `InteractiveMarkerFeedback.BUTTON_CLICK` events. What other events are there?
+
+In Lab 15 and your next assignment, you will create interactive markers to control the base of the robot.
