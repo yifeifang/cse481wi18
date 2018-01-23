@@ -78,7 +78,7 @@ rosrun rviz rviz -d ~/.rviz/myconfig.rviz
 
 To open RViz from a launch file with a particular config file, add this to your launch file:
 ```xml
-<node pkg="rviz" type="rviz" name="$(anon rviz)" args="-d ~/.rviz/myconfig.rviz" />
+<node pkg="rviz" type="rviz" name="$(anon rviz)" args="-d $(env HOME)/.rviz/myconfig.rviz" />
 ```
 
 Try saving and loading a custom RViz config now.
