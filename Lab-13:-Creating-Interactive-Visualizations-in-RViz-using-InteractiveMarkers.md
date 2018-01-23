@@ -108,7 +108,7 @@ However, there are many more things you can do.
 
 **Things to try:**
 You do not need to implement these, but look at the available documentation and think about these questions:
-- Look at Robot Web Tools's [online demo of interactive markers](http://robotwebtools.org/demos/im.html)
+- (Broken) ~~Look at Robot Web Tools's [online demo of interactive markers](http://robotwebtools.org/demos/im.html)~~
 - Look at the Code API. How do you erase a marker from the server?
 - How do you add a right-click menu to a marker?
 - Our demo responds to `InteractiveMarkerFeedback.BUTTON_CLICK` events. What other events are there?
