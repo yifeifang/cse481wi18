@@ -81,6 +81,8 @@ To open RViz from a launch file with a particular config file, add this to your 
 <node pkg="rviz" type="rviz" name="$(anon rviz)" args="-d ~/.rviz/myconfig.rviz" />
 ```
 
+Try saving and loading a custom RViz config now.
+
 # RViz with the real robot
 
 RViz can similarly be used to visualize the current state of the real physical robot and its sensor data.
