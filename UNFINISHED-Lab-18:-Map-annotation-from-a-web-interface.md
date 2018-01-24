@@ -494,8 +494,6 @@ ready() {
 }
 ```
 
-Note that you can change the config in the web-based version of RViz
-
 # Final result
 Here is a video showing how your interface might look when done.
 Note that changes are synchronized between different browsers and RViz.
