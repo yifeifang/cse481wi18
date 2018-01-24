@@ -21,7 +21,7 @@ The app will split responsibilities between buttons displayed on the web page an
 | **List poses** | List of poses displayed in interface. | |
 | **Delete pose** | User clicks "Delete" next to pose. | |
 | **Send robot to pose** | User clicks "Go here" next to pose. | |
-| **Edit pose** (optional) | | User drags interactive marker. |
+| **Edit pose** | | User drags interactive marker. |
 | **Rename pose** (optional) | User renames in web interface. | |
 
 # Latched topics
