@@ -91,15 +91,22 @@ Before splitting into two groups, you should decide on the exact message formats
 You should then create and build your messages.
 Once you have done so, you are ready to work concurrently.
 
-# Download prereqs
+# Common setup
+Install some packages:
 ```
 sudo apt-get install ros-indigo-rosbridge-server ros-indigo-tf2-web-republisher ros-indigo-interactive-marker-proxy
 ```
 
-# Launch file
-Create a launch file for your team:
-
+The course repo has a new package: `web_collada_server`.
+Copy it into your repository and build your code.
+When you add a new repository to your workspace, you also need to re-source your .bashrc files in other terminal windows:
+```bash
+# Run in every terminal window after adding a new package and building it successfully
+source ~/.bashrc
 ```
+
+Create a launch file for your team:
+```bash
 cd ~/catkin_ws/src/cse481c/map_annotator
 mkdir launch
 vim launch/map_annotator.launch
@@ -120,6 +127,7 @@ vim launch/map_annotator.launch
     <remap from="topic_ns" to="/map_annotator/map_poses" />
     <param name="update_rate" value="10.0" />
   </node>
+  <node pkg="collada_web_server" type="run_caddy.bash" name="collada_caddy" cwd="node" />
 </launch>
 ```
 
@@ -245,7 +253,10 @@ rostopic pub /map_annotator/pose_names map_annotator/PoseNames "names:
 
 You should see the poses you published in the console.
 
-Now, let's render the pose list in the DOM:
+Now, let's render the pose list in the DOM using a [`<dom-repeat>`](https://www.polymer-project.org/2.0/docs/devguide/templates#dom-repeat) element.
+Any JavaScript Array can be passed in to `items`, and each element is named `item` in the loop.
+You can also change the name from `item` to something else and get the numerical index in the loop, see the documentation for details.
+
 ```html
 <h2>Poses</h2>
 <template is="dom-repeat" items="[[poseNames.names]]">
@@ -307,12 +318,183 @@ Now use your element instead of the `<div>` we created earlier:
 </template>
 ```
 
-![image](https://cloud.githubusercontent.com/assets/1175286/25216800/21d53aee-2559-11e7-8c9c-de15cce503b3.png)
+Note that when passing in the `poseName` property, we actually spell it as `pose-name`.
+This is a quirk of the system, which converts lowercase-with-dash names into camelCase.
 
-# Testing on your phone
-Once your tool is working, you should be able to load the webpage from your phone by visiting `IP_ADDRESS:8081/` in a web browser.
-You can find your course computer's IP address by typing `ifconfig` in a terminal.
-Deleting a pose on your phone should be reflected on the desktop computer, and vice versa.
+## Sending UserActions
+- Import `<ros-topic>` in `map-annotator-pose.html`
+- Add a `<ros-topic>` to the DOM of `<map-annotator-pose>`:
+  ```html
+  <ros-topic
+    auto
+    id="userActions"
+    topic="map_annotator/user_actions"
+    ros="{{ros}}"
+    msg-type="map_annotator/UserAction"
+  ></ros-topic>
+  ```
+
+Now, add a `<paper-button>` to `<map-annotator-pose>`:
+```html
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<paper-button on-tap="_handleDelete">Delete</paper-button>
+```
+
+And add a handler:
+```js
+_handleDelete(evt) {
+  console.log('Deleting', this.poseName);
+}
+```
+
+To publish a message using `<ros-websocket>`:
+```js
+_handleDelete(evt) {
+  console.log('Deleting', this.poseName);
+  var msg = {
+    command: 'delete',
+    name: this.poseName
+  };     
+  this.$.userActions.publish(msg);
+}
+```
+
+Now, look at the output of `rostopic echo /map_annotator/user_actions` while clicking on the "Delete" button.
+You should be publishing the UserAction message.
+
+As a frontend developer, just knowing that the message got published correctly is technically enough.
+It is the backend's responsibility to subscribe to the user actions and respond appropriately.
+
+## Add more UserActions
+Now, you will want to add another `<ros-topic>` element, this time to your main element, `map-annotator-app.html`.
+Here, you can add a "Create pose" button that instructs the backend to insert a new pose into the database.
+You can use the `prompt` function in JavaScript to get the name of the pose from the user.
+
+Also, add a "Go to" button next to each pose, which will instruct the backend to trigger navigation to that pose.
+
+Polymer HTML elements operate in an "include what you use" way, so be sure to import `<paper-button>` and `<ros-topic>` in both HTML files.
+
+## Adding `<ros-rviz>`
+Now, we will add an RViz display in the web browser, using the experimental [`<ros-rviz>`](https://www.webcomponents.org/element/jstnhuang/ros-rviz) element.
+
+Import `<ros-rviz>`:
+```html
+<link rel="import" href="../bower_components/ros-rviz/ros-rviz.html">
+```
+
+Now, we will add it to the body of the app.
+To get a nicer-looking layout, you will need to make several changes to your code.
+
+First, import the `iron-flex-layout-classes`:
+
+```html
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+```
+
+Then replace your styles with the two tags below:
+```html
+<style is="custom-style" include="iron-flex"></style>
+<style>
+  :host {
+    display: block;
+    box-sizing: border-box;
+    padding: 8px;
+    font-family: sans-serif;
+    height: 100%;
+  }
+  #main {
+    height: 100%;
+  }
+  #content {
+    height: 100%;
+  }
+  #controls {
+    min-width: 300px;
+  }
+  map-annotator-pose + map-annotator-pose {
+    margin-top: 8px;
+  }
+</style>
+```
+
+Now, reformat your HTML code as shown:
+```html
+<div id="main" class="layout vertical">
+  <h1>Map annotator</h1>
+  <div>{{status}}</div>
+  <div id="content" class="layout horizontal">
+    <div id="controls">
+      <h2>Poses</h2>
+      <template is="dom-repeat" items="[[poseNames.names]]">
+        <map-annotator-pose ros="[[ros]]" pose-name="[[item]]"></map-annotator-pose>
+      </template>
+    </div>
+    <ros-rviz id="rviz" class="flex"></ros-rviz>
+  </div>
+</div>
+```
+
+This is more or less what your app should look like, module a few extra styles:
+
+![image](https://user-images.githubusercontent.com/1175286/35306781-6827e510-0054-11e8-88b2-96994b76af70.png)
+
+Finally, you must configure RViz to show the displays that you want.
+
+Add a `ready` function to the JavaScript part of your app:
+```js
+ready() {
+  super.ready();
+  var config = {
+    "globalOptions": {
+      "background": "#113344",
+      "colladaLoader": "collada2",
+      "colladaServer": "http://localhost:8001/",
+      "fixedFrame": "/base_link",
+      "url": "ws://localhost:9090",
+      "videoServer": "http://localhost:9999"
+    },
+    "sidebarOpened": false,
+    "displays": [
+      {
+        "isShown": true,
+        "name": "Grid",
+        "options": {
+          "cellSize": "1",
+          "color": "#cccccc",
+          "numCells": "10"
+        },
+        "type": "grid"
+      },
+      {
+        "isShown": true,
+        "name": "Map",
+        "options": {
+          "color": {
+            "r": 255,
+            "g": 255,
+            "b": 255
+          },
+          "continuous": true,
+          "opacity": "1",
+          "topic": "/map"
+        },
+        "type": "occupancyGrid"
+      },
+      {
+        "isShown": true,
+        "name": "Robot model",
+        "options": {
+          "param": "robot_description"
+        },
+        "type": "urdf"
+      }
+    ]
+  };
+  this.$.rviz.config = config;	
+}
+```
+
+Note that you can change the config in the web-based version of RViz
 
 # Final result
 Here is a video showing how your interface might look when done.
