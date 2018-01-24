@@ -78,11 +78,17 @@ The frontend team will build a web app that works like so:
 - Next to each pose name is a "Go to" and "Delete" button. Clicking on either sends the appropriate UserAction to the server
 
 The backend team will build a server, based on the previous lab's command-line interface, that works like so:
-- The server publishes the list of saved poses to /map_annotator/pose_names as a PoseNames message.
+- The server publishes the list of saved poses to `/map_annotator/pose_names` as a PoseNames message.
 - Whenever a pose is added or deleted, the list gets republished (remember to set `latch=True` when creating the publisher)
 - The server subscribes to `map_annotator/user_actions`, and executes the commands as they come in
-- The server manages the interactive markers for all the poses
+- The server manages the interactive markers for all the poses.
+- The interactive marker server name will be `/map_annotator/map_poses`
 - The server saves the poses to a file (using pickle or a database system of your choice) and loads them on startup
+
+Here is a video showing how your interface might look when done.
+Note that changes are synchronized between different browsers.
+
+[![image](https://i.ytimg.com/vi/rIKgKWZiCMA/hqdefault.jpg)](https://youtu.be/rIKgKWZiCMA)
 
 Below, we give a few tips for the backend team.
 The rest of the lab is dedicated to building the frontend.
@@ -133,11 +139,12 @@ vim launch/map_annotator.launch
 
 # Interactive marker / backend team
 ## Interactive marker interface
-Once a user creates a marker and gives it a name in the web interface, a new interactive marker should appear in (web) RViz at the ground level at the (0, 0, 0) position and unit orientation.
-The marker should be an arrow, so that the user can tell which way the Fetch will be facing in this pose.
-The user should be able to change the marker's position and orientation.
-As the pose of the marker is changed, the database (or whatever data structure you are using to store the poses) should be updated.
-And, if a pose is deleted from the web interface, the marker for that pose should disappear from RViz as well.
+- Once a user creates a marker and gives it a name in the web interface, a new interactive marker should appear in (web) RViz at the ground level at the (0, 0, 0) position and unit orientation.
+- The marker should be an arrow, so that the user can tell which way the Fetch will be facing in this pose.
+- The user should be able to change the marker's position and orientation.
+- As the pose of the marker is changed, the database (or whatever data structure you are using to store the poses) should be updated.
+- If a pose is deleted from the web interface, the marker for that pose should disappear from the visualization as well.
+- The name of the pose should be displayed above the interactive marker. To do this, simply add an extra InteractiveMarkerControl and text Marker to your interactive marker.
 
 **Hint:**
 Look at the *Chess Piece* marker in the [Interactive Markers Basic Controls tutorial](http://wiki.ros.org/rviz/Tutorials/Interactive%20Markers%3A%20Basic%20Controls) to get an idea of how to create a marker that can be dragged in the XY plane.
@@ -385,7 +392,19 @@ Import `<ros-rviz>`:
 Now, we will add it to the body of the app.
 To get a nicer-looking layout, you will need to make several changes to your code.
 
-First, import the `iron-flex-layout-classes`:
+First, in **index.html**:
+```diff
++ <style>
++   html, body {
++     height: 100%;
++     margin: 0;
++     padding: 0;
++   }
++ </style>
+<link rel="import" href="/src/map-annotator-app.html">
+```
+
+Next, import the `iron-flex-layout-classes` in **map-annotator-app.html**:
 
 ```html
 <link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
@@ -434,7 +453,7 @@ Now, reformat your HTML code as shown:
 </div>
 ```
 
-This is more or less what your app should look like, module a few extra styles:
+This is more or less what your app should look like, with a few extra styles added:
 
 ![image](https://user-images.githubusercontent.com/1175286/35306781-6827e510-0054-11e8-88b2-96994b76af70.png)
 
@@ -446,10 +465,10 @@ ready() {
   super.ready();
   var config = {
     "globalOptions": {
-      "background": "#113344",
+      "background": "#111111",
       "colladaLoader": "collada2",
       "colladaServer": "http://localhost:8001/",
-      "fixedFrame": "/base_link",
+      "fixedFrame": "/map",
       "url": "ws://localhost:9090",
       "videoServer": "http://localhost:9999"
     },
@@ -487,15 +506,17 @@ ready() {
           "param": "robot_description"
         },
         "type": "urdf"
+      },
+      {
+        "isShown": true,
+        "name": "Interactive Markers",
+        "options": {
+          "topic": "/map_annotator/map_poses"
+        },
+        "type": "interactiveMarkers"
       }
     ]
   };
   this.$.rviz.config = config;	
 }
 ```
-
-# Final result
-Here is a video showing how your interface might look when done.
-Note that changes are synchronized between different browsers and RViz.
-Also note that when the backend is restarted, all the poses reappear in the same locations.
-[![image](http://i3.ytimg.com/vi/ZoHjurYzME0/hqdefault.jpg)](https://youtu.be/ZoHjurYzME0)
