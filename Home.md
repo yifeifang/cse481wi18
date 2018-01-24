@@ -19,6 +19,7 @@ Note: After Lab 4, it is possible for one or two members of your team to split o
 - [[Lab 10: Robot web interfaces]]
 
 ## Week 4
+Roughly: Labs 11-13, 14-15, and 16-18 can be done concurrently.
 - [[Lab 11: Visualizations in ROS with RViz]]
 - [[Lab 12: Creating Custom Visualizations in RViz using Markers]]
 - [[Lab 13: Creating Interactive Visualizations in RViz using InteractiveMarkers]]
@@ -26,4 +27,4 @@ Note: After Lab 4, it is possible for one or two members of your team to split o
 - [[Lab 15: Driving with odometry]]
 - [[Lab 16: Mapping and navigation]]
 - [[Lab 17: Sending navigation goals]]
-- [[Lab 18: Map annotation from a web interface]] (Coming Thursday, Jan 25)
+- [[Lab 18: Map annotation from a web interface]]
