@@ -459,6 +459,8 @@ This is more or less what your app should look like, with a few extra styles add
 
 Finally, you must configure RViz to show the displays that you want.
 
+When your backend is ready (e.g., the server is done and Fetch navigation is running), you can set up `<ros-rviz>`:
+
 Add a `ready` function to the JavaScript part of your app:
 ```js
 ready() {
