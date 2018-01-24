@@ -520,3 +520,7 @@ ready() {
   this.$.rviz.config = config;	
 }
 ```
+
+Now, your app should look like this:
+
+![image](https://user-images.githubusercontent.com/1175286/35311223-4e720428-006a-11e8-9f06-551ec4e675bc.png)
