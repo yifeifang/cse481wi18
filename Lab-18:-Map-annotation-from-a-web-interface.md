@@ -103,7 +103,7 @@ Install some packages:
 sudo apt-get install ros-indigo-rosbridge-server ros-indigo-tf2-web-republisher ros-indigo-interactive-marker-proxy
 ```
 
-The course repo has a new package: `web_collada_server`.
+The course repo has a new package: `collada_web_server`.
 Copy it into your repository and build your code.
 When you add a new repository to your workspace, you also need to re-source your .bashrc files in other terminal windows:
 ```bash
