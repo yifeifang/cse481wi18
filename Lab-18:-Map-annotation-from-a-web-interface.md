@@ -407,7 +407,7 @@ First, in **index.html**:
 Next, import the `iron-flex-layout-classes` in **map-annotator-app.html**:
 
 ```html
-<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
 ```
 
 Then replace your styles with the two tags below:
@@ -448,7 +448,7 @@ Now, reformat your HTML code as shown:
         <map-annotator-pose ros="[[ros]]" pose-name="[[item]]"></map-annotator-pose>
       </template>
     </div>
-    <ros-rviz id="rviz" class="flex"></ros-rviz>
+    <ros-rviz id="rviz" ros="[[ros]]" class="flex"></ros-rviz>
   </div>
 </div>
 ```
