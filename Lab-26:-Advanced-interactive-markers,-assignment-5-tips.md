@@ -147,7 +147,7 @@ im_server = InteractiveMarkerServer('gripper_im_server', q_size=2)
 auto_pick_server = InteractiveMarkerServer('auto_pick_im_server', q_size=2)
 ```
 
-## 2. Assignment 5 obstacles file (FORTHCOMING)
+## 2. Assignment 5 obstacles file
 You **must** run this code to add the bottom and top shelves of the classroom into the PlanningScene.
 Add this code to your repository in `applications/scripts/a5_obstacles.py`.
 Mark it as executable and push it to Github.
@@ -178,10 +178,10 @@ def main():
 
     planning_scene = PlanningSceneInterface('base_link')
     planning_scene.clear()
-    planning_scene.removeCollisionObject('top_shelf')
-    planning_scene.removeCollisionObject('bottom_shelf')
-    planning_scene.addBox('top_shelf', 0.32, 1, 0.4, 0.99, 0, 1.64)
-    planning_scene.addBox('bottom_shelf', 0.5, 1, 1.09, 0.9, 0, 0.545)
+    planning_scene.removeCollisionObject('table')
+    planning_scene.removeCollisionObject('floor')
+    planning_scene.addBox('floor', 2, 2, 0.01, 0, 0, 0.01/2)
+    planning_scene.addBox('table', 0.5, 1, 0.72, 1, 0, 0.72/2)
 
     rospy.sleep(2)
 
