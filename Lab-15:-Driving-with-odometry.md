@@ -161,3 +161,10 @@ angular_speed = max(0.25, min(1, remaining_angle))
 However, fundamentally, this control strategy is based on odometry from the wheel sensors, which will eventually be inaccurate.
 A better approach is to have additional, more reliable sensors that tell us where the robot is.
 We will see how the Fetch does navigation in the next lab.
+
+# Interactive marker interface
+As part of your assignment, you drive the robot by clicking on interactive markers.
+Add interactive markers (the exact shape is up to you) around the robot's base.
+Clicking on one of the markers should drive the robot forward by a half meter.
+Clicking on two others should turn the robot by some amount (e.g., 30 degrees) clockwise or counter-clockwise.
+The exact interface is up to you, but the markers would preferably follow the robot as it drives.
