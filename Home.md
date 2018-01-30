@@ -28,3 +28,13 @@ Roughly: Labs 11-13, 14-15, and 16-18 can be done concurrently.
 - [[Lab 16: Mapping and navigation]]
 - [[Lab 17: Sending navigation goals]]
 - [[Lab 18: Map annotation from a web interface]]
+
+## Week 5
+- [[Lab 19: Cartesian space manipulation]]
+- [[Lab 20: Checking for reachability]]
+- [[Lab 21: Obstacle avoidance]]
+- [[Lab 22: Path constraints]]
+- [[Lab 23: TF]]
+- [[Lab 24: Transform arithmetic]]
+- [[Lab 25: Fast IK with IKFast]]
+- [[Lab 26: Advanced interactive markers, assignment 5 tips]]
