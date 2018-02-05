@@ -168,7 +168,7 @@ The documentation on [substitution args](http://wiki.ros.org/roslaunch/XML#subst
 <launch>
   <arg name="map_file" default="???" />
   <include file="???">
-    <arg name="map_file" value="???"
+    <arg name="map_file" value="???" />
   </include>
   <node pkg="rviz" type="rviz" name="???" args="???" />
 </launch>
