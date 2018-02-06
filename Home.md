@@ -48,13 +48,13 @@ If you are not familiar with C++, consider reading through the [C++ crash course
 - [[Lab 30: Introduction to point cloud processing]]
 - [[Lab 31: Planar segmentation]]
 - [[Lab 32: Euclidean clustering]]
+- [[Lab 33: Fitting bounding boxes]]
 
 ## Week 7
-- [[Lab 33: Fitting bounding boxes (optional)]]
 - [[Lab 34: Object recognition]]
 
 ## Bonus tutorials
-Please let the course staff know if there's a topic you'd like to see a tutorial on!
+Please let the course staff know if there's a tutorial you'd like to see!
 - [C++ crash course](https://github.com/cse481wi18/cse481wi18/wiki/Cpp-crash-course)
 - [[Tutorial: Controlling navigation speed]]
 - [[Tutorial: Simulating point cloud locations]]
