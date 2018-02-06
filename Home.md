@@ -38,3 +38,10 @@ Roughly: Labs 11-13, 14-15, and 16-18 can be done concurrently.
 - [[Lab 24: Transform arithmetic]]
 - [[Lab 25: Fast IK with IKFast]]
 - [[Lab 26: Advanced interactive markers, assignment 5 tips]]
+
+## Week 6
+- [[Lab 27: Our first cpp package]]
+- [[Lab 28: AR tags]]
+- [[Lab 29: Assignment 6 tips]]
+- [[Lab 30: Introduction to point cloud processing]]
+- [[Lab 31: Planar segmentation]]
