@@ -54,6 +54,7 @@ If you are not familiar with C++, consider reading through the [C++ crash course
 - [[Lab 34: Object recognition]]
 
 ## Bonus tutorials
+Please let the course staff know if there's a topic you'd like to see a tutorial on!
 - [C++ crash course](https://github.com/cse481wi18/cse481wi18/wiki/Cpp-crash-course)
 - [[Tutorial: Controlling navigation speed]]
 - [[Tutorial: Simulating point cloud locations]]
