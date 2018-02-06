@@ -45,6 +45,7 @@ When building C++ code, you must configure catkin by editing `package.xml` and `
 
 In `package.xml`, you will add a `<depend>` tag for each ROS package that your code depends on.
 All ROS C++ code must depend on the `roscpp` package.
+If your `package.xml` contains `<build_depend>`, `<build_export_depend>`, and `<exec_depend>`, they can all be replaced with a single `<depend>` tag, as described in the [catkin documentation](http://docs.ros.org/indigo/api/catkin/html/howto/format2/catkin_library_dependencies.html)
 
 `CMakeLists.txt` looks daunting at first.
 We will discuss everything that goes in it.
@@ -240,7 +241,7 @@ Before you build, remember that you started depending on four new packages:
 - tf
 - rosbag
 
-Add a `<build_depend>` and a `<exec_depend>` for each of those four packages to your `package.xml`.
+Add a `<depend>` tag for each of those four packages to your `package.xml`.
 
 Next, add those three packages to `find_package` in `CMakeLists.txt`:
 ```cmake
