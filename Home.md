@@ -52,3 +52,6 @@ If you are not familiar with C++, consider reading through the [C++ crash course
 ## Week 7
 - [[Lab 33: Fitting bounding boxes (optional)]]
 - [[Lab 34: Object recognition]]
+
+## Bonus tutorials
+- [[Tutorial: Controlling navigation speed]]
