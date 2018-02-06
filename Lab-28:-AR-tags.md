@@ -168,7 +168,7 @@ roscp ar_track_alvar pr2_indiv.launch ~/catkin_ws/src/fetch_api/launch/ar_deskto
 ```
 
 Edit the launch file and make the following changes:
-- The `marker_size` is 4.5 cm, not 4.4
+- The `marker_size` is 5.6 cm, not 4.4
 - Set `cam_image_topic` to `/head_camera/depth_registered/points`.
 - Set `cam_info_topic` to `/head_camera/rgb/camera_info`
 - Change the `output_frame` to `base_link`.
