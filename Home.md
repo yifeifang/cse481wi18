@@ -45,3 +45,4 @@ Roughly: Labs 11-13, 14-15, and 16-18 can be done concurrently.
 - [[Lab 29: Assignment 6 tips]]
 - [[Lab 30: Introduction to point cloud processing]]
 - [[Lab 31: Planar segmentation]]
+- [[Lab 32: Euclidean clustering]]
