@@ -3,6 +3,9 @@
 - [ROS Python Overview](http://wiki.ros.org/rospy/Overview)
 - [ROS C++ Overview](http://wiki.ros.org/roscpp/Overview)
 
+- [RViz Marker API](http://wiki.ros.org/rviz/DisplayTypes/Marker)
+- [visualization_msgs/Marker](http://docs.ros.org/api/visualization_msgs/html/msg/Marker.html)
+
 # Fetch
 - [Fetch documentation](http://docs.fetchrobotics.com/)
 
