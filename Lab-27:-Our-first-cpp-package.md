@@ -52,7 +52,6 @@ Ignoring comments, try to make your CMakeLists.txt look like this:
 ```cmake
 cmake_minimum_required(VERSION 2.8.3)
 project(perception)
-add_definitions(-std=c++11)
 
 find_package(catkin REQUIRED COMPONENTS
   roscpp
