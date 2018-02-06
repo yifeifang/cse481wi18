@@ -155,9 +155,6 @@ The `ar_track_alvar` package has not been installed on the course computers.
 To install a ROS package named `package_name`, run `sudo apt-get install ros-indigo-package-name`.
 Install `ar_track_alvar` now.
 
-**Note:** The AR tag package installed on the Fetch is an old version that has a different API.
-For now, we will use the newer package.
-
 ## Configure for the Fetch
 Read the documentation for `ar_track_alvar`.
 Section 4.1 explains that you can detect markers by running the `individualMarkers` node.
