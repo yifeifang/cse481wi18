@@ -240,7 +240,7 @@ Before you build, remember that you started depending on four new packages:
 - tf
 - rosbag
 
-Add a `<build_depend>` and a `<run_depend>` for each of those four packages to your `package.xml`.
+Add a `<build_depend>` and a `<exec_depend>` for each of those four packages to your `package.xml`.
 
 Next, add those three packages to `find_package` in `CMakeLists.txt`:
 ```cmake
