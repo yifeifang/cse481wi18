@@ -84,6 +84,8 @@ You should save a few point clouds of the table with AR tags on it and hallucina
 In your system, users should physically move the robot's arm.
 However, you can't do this in simulation.
 Instead, you can just teleop the arm using the teleop applications we developed in previous labs.
+You can also use the [MoveIt RViz plugin](https://github.com/cse481wi18/cse481wi18/wiki/Tutorial%3A-MoveIt-RViz-plugin).
+
 Note that while on the real robot, you want to relax the arm, you always need to switch the arm controller on when sending MoveIt commands (e.g., when using teleop).
 As a result, when you are in simulation, you should not relax the arm when programming.
 
