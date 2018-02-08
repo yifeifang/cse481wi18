@@ -40,7 +40,9 @@ Roughly: Labs 11-13, 14-15, and 16-18 can be done concurrently.
 - [[Lab 26: Advanced interactive markers, assignment 5 tips]]
 
 ## Week 6
-If you are not familiar with C++, consider reading through the [C++ crash course](https://github.com/cse481wi18/cse481wi18/wiki/Cpp-crash-course)
+If you are not familiar with C++, consider reading through the [C++ crash course](https://github.com/cse481wi18/cse481wi18/wiki/Cpp-crash-course).
+
+Labs 27-29 and Labs 30-33 can be done semi-concurrently. However, they both require the use of RViz and Gazebo.
 
 - [[Lab 27: Our first cpp package]]
 - [[Lab 28: AR tags]]
