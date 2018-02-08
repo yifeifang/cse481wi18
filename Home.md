@@ -58,3 +58,4 @@ Please let the course staff know if there's a tutorial you'd like to see!
 - [C++ crash course](https://github.com/cse481wi18/cse481wi18/wiki/Cpp-crash-course)
 - [[Tutorial: Controlling navigation speed]]
 - [[Tutorial: Simulating point cloud locations]]
+- [[Tutorial: MoveIt RViz plugin]]
