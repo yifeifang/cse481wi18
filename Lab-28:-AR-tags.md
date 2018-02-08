@@ -203,6 +203,7 @@ Hints:
 - Be sure to run MoveIt before running this code
 - Raise the torso to full height before starting
 - It is normal for some markers to not be found. If none of them are found (or none of them are reachable), try setting up your tags differently and recording more point clouds.
+- Note that the markers have arbitrary orientations that are usually not suitable for the gripper to be in. When reaching for the marker, you should aim to send the gripper to the marker's position, but not with the same orientation as the marker. You can use the identity orientation for the gripper.
 
 ```py
 #! /usr/bin/env python
