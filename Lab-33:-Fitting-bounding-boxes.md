@@ -45,7 +45,7 @@ if (shape.type == shape_msgs::SolidPrimitive::BOX) {
 The box height might be shifted up by 1, so shift it back down if the visualization looks wrong.
 Note that this only works if the table is approximately level:
 ```cpp
-table_marker.pose.position-z -= table_marker.scale.z
+table_marker.pose.position.z -= table_marker.scale.z
 ```
 
 With the uncropped point cloud, the table segmentation visualization now looks like this:
