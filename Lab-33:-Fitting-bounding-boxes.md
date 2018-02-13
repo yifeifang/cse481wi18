@@ -5,6 +5,7 @@ Install `simple_grasping` if you don't already have it:
 ```
 sudo apt-get install ros-indigo-simple-grasping
 ```
+You'll also need to reference it in your CMakeLists.txt under the `find_package` line.
 
 `simple_grasping` has a function called [`extractShape`](http://docs.ros.org/indigo/api/simple_grasping/html/namespacesimple__grasping.html#a5e500982f834eea5d24a33c8c63df2fe), which will fit a bounding box as snugly as possible around a given point cloud.
 
