@@ -117,7 +117,7 @@ First, create the file `perception/include/perception/object.h`
 
 namespace perception {
 struct Object {
-  string name;
+  std::string name;
   double confidence;
   pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud;
   geometry_msgs::Pose pose;
