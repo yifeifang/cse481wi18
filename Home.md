@@ -55,6 +55,7 @@ Labs 27-29 and Labs 30-33 can be done semi-concurrently. However, they both requ
 ## Week 7
 - [[Lab 34: Object recognition]]
 - CoMotion Makerspace tutorial
+- You can find meshes for the robot in the [fetch_description](https://github.com/fetchrobotics/fetch_ros/tree/indigo-devel/fetch_description) package (`roscd fetch_description`).
 
 ## Bonus tutorials
 Please let the course staff know if there's a tutorial you'd like to see!
