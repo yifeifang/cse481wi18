@@ -43,7 +43,7 @@ This starts the Karto SLAM node.
 
 ## Configure RViz
 We will want to have different RViz configs for different purposes.
-What to visualize while navigation will be different from what to visualize when working on perception or manipulation.
+What to visualize while navigating will be different from what to visualize when working on perception or manipulation.
 We can even have multiple instances of RViz open, each with its own configuration.
 
 For building a map, we will want to visualize the following things:
@@ -65,7 +65,7 @@ Save your config file to `~/catkin_ws/src/cse481c/applications/config/navigation
 
 ## Configure a launch file
 In this section, we will see how to create a launch file to automate the process of launching multiple things.
-In this case, the build a map, we need to run or launch three separate things:
+In this case, to build a map, we need to run or launch three separate things:
 - `roslaunch fetch_navigation build_map.launch`
 - `rosrun rviz rviz -d ~/catkin_ws/src/cse481c/applications/config/navigation.rviz`
 - `rosrun applications keyboard_teleop.py`
