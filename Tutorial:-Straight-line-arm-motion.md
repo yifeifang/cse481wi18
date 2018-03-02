@@ -20,11 +20,11 @@ If you see the arm flip around wildly, this indicates that the arm is passing th
 A singularity is a configuration where the end-effector loses its ability to smoothly move in one or more directions.
 In order move in the restricted direction, the robot needs to "jump" to a different configuration, resulting in infinitely fast motion for some joints.
 
-[![image](https://media.giphy.com/media/5QYiYtvoGYIY4xaRQG/giphy.gif)](https://youtu.be/ryc3cPEvrp0)
+[![image](https://media.giphy.com/media/5QYiYtvoGYIY4xaRQG/giphy.gif)]()
 
 If, on the other hand, you see the arm moving smoothly through the motion, this means that a straight-line path is probably feasible:
 
-[![image](https://media.giphy.com/media/1msK2e5i1CRlOqPluA/giphy.gif)](https://youtu.be/eTXUB_OInc8)
+[![image](https://media.giphy.com/media/1msK2e5i1CRlOqPluA/giphy.gif)]()
 
 # Update arm.py
 We have updated [`fetch_api/src/fetch_api/arm.py`](https://github.com/cse481wi18/cse481wi18/blob/indigo-devel/fetch_api/src/fetch_api/arm.py#L239) in the course repository with a new method:
