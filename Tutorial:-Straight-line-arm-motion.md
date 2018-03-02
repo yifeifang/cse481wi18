@@ -33,9 +33,17 @@ def straight_move_to_pose(self, group, pose_stamped, ee_step=0.025, jump_thresho
 ```
 
 To implement this, we use a different MoveIt API than we used for the other arm methods.
-[`applications/scripts/straight_gripper_motion_demo.py`](https://github.com/cse481wi18/cse481wi18/blob/indigo-devel/applications/scripts/straight_gripper_motion_demo.py) illustrates how to use this new API.
 
-A code snippet showing how to use `straight_move_to_pose` is shown below:
+# Demo
+[`applications/scripts/straight_gripper_motion_demo.py`](https://github.com/cse481wi18/cse481wi18/blob/indigo-devel/applications/scripts/straight_gripper_motion_demo.py) illustrates how to use this new API:
+```
+roslaunch fetch_gazebo playground.launch
+roslaunch fetch_api move_group.launch
+rosrun applications torso_demo 0.4
+rosrun applications straight_gripper_motion_demo.py
+```
+
+A minimal code snippet showing how to use `straight_move_to_pose` is shown below:
 ```py
 import moveit_commander
 import sys
