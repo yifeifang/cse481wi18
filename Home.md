@@ -63,3 +63,4 @@ Please let the course staff know if there's a tutorial you'd like to see!
 - [[Tutorial: Controlling navigation speed]]
 - [[Tutorial: Simulating point cloud locations]]
 - [[Tutorial: MoveIt RViz plugin]]
+- [[Tutorial: Robot sound and speech]]
